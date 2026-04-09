@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Reserva VIP | Aris Eduardo 🌴</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-overlay"></div>
+        <div class="header-content">
+            <span class="brand-tag">PREMIUM</span>
+            <h1>Vacacional Aris Eduardo</h1>
+            <p><span class="icon">📍</span> República Dominicana</p>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="booking-shell">
+            <div class="promo-bar">
+                ✨ Reserva con el 50% de adelanto
+            </div>
+
+            <div class="section-title">1. ¿Cuándo vienes?</div>
+            <div class="input-wrapper">
+                <input type="text" id="fecha" placeholder="Selecciona entrada y salida" readonly>
+            </div>
+
+            <div class="section-title">2. Elige tus habitaciones</div>
+            <div class="rooms-container">
+                <div class="room-card">
+                    <div class="room-img" style="background-image: url('img/hero1.jpg')"></div>
+                    <div class="room-details">
+                        <div class="room-header"><label>Sencilla</label><span class="price">RD$ 1,500</span></div>
+                        <p class="limit">Disponibles: 4</p>
+                        <input type="number" id="s" min="0" max="4" value="0">
+                    </div>
+                </div>
+                <div class="room-card">
+                    <div class="room-img" style="background-image: url('img/hero12.jpg')"></div>
+                    <div class="room-details">
+                        <div class="room-header"><label>Con Aire</label><span class="price">RD$ 2,500</span></div>
+                        <p class="limit">Disponibles: 3</p>
+                        <input type="number" id="a" min="0" max="3" value="0">
+                    </div>
+                </div>
+                <div class="room-card">
+                    <div class="room-img" style="background-image: url('img/hero2.jpg')"></div>
+                    <div class="room-details">
+                        <div class="room-header"><label>Doble</label><span class="price">RD$ 3,000</span></div>
+                        <p class="limit">Disponibles: 3</p>
+                        <input type="number" id="d" min="0" max="3" value="0">
+                    </div>
+                </div>
+                <div class="room-card">
+                    <div class="room-img" style="background-image: url('img/hero3.jpg')"></div>
+                    <div class="room-details">
+                        <div class="room-header"><label>Triple</label><span class="price">RD$ 4,000</span></div>
+                        <p class="limit">Disponibles: 2</p>
+                        <input type="number" id="t" min="0" max="2" value="0">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-title">3. Huéspedes</div>
+            <div class="input-wrapper">
+                <input type="number" id="personas" min="1" placeholder="¿Cuántas personas?">
+            </div>
+
+            <button id="calcularBtn" class="primary-btn">CALCULAR TOTAL</button>
+
+            <div id="resultado" class="hidden shadow-box">
+                <div class="resumen-header">Resumen de tu Estancia</div>
+                <div id="resumenContent"></div>
+                <button id="btnConfirmar" class="wa-btn">Confirmar por WhatsApp</button>
+            </div>
+        </div>
+    </main>
+
+    <div id="adminBtn" class="floating-admin">⚙️</div>
+
+    <div id="adminPanel" class="admin-modal hidden">
+        <div class="admin-inner">
+            <button id="closeAdmin">✕</button>
+            <h3>Panel de Control</h3>
+            <input type="password" id="adminCode" placeholder="Código Admin">
+            <button id="loginAdmin" class="primary-btn">Entrar</button>
+
+            <div id="adminContent" class="hidden">
+                <div class="admin-section">
+                    <h4>🚫 Bloquear Fecha</h4>
+                    <input type="text" id="pickerBloqueo" placeholder="Selecciona fecha">
+                    <button id="btnBloquear" class="primary-btn red">Bloquear Hoy</button>
+                </div>
+                <div class="admin-section">
+                    <h4>📋 Reservas</h4>
+                    <div id="reservasLista"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
