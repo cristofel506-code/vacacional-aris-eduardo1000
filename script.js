@@ -2,112 +2,109 @@ import flatpickr from "https://cdn.jsdelivr.net/npm/flatpickr/+esm";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const firebaseConfig = { 
-  apiKey : "AIzaSyAftAGJCLVZGh1mqralhIJa8W7jPvV69iU" , 
-  authDomain : "vacacional0.firebaseapp.com" , 
-  projectId : "vacacional0" , 
-  storageBucket : "vacacional0.firebasestorage.app" , 
-  messagingSenderId : "212872737369" , 
-  appId : "1:212872737369:web:400033a5197248d6f8b748" 
+const firebaseConfig = {
+    apiKey: "AIzaSyDyIdyX_sH9FGB6VPL4Mz9dPlKmyMDYlFc",
+    authDomain: "vacacional-aris-543d8.firebaseapp.com",
+    projectId: "vacacional-aris-543d8",
+    storageBucket: "vacacional-aris-543d8.firebasestorage.app",
+    messagingSenderId: "745069402487",
+    appId: "1:745069402487:web:3c0d9828fbb52ca8e2e972"
 };
 
-// Inicializar Firebase
-const app = initializeApp ( firebaseConfig );
+const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 let noches = 0;
-let reservaActual = null;
+let rData = null;
 
 document.addEventListener("DOMContentLoaded", async () => {
     
-    // 1. CARGAR FECHAS BLOQUEADAS
-    let bloqueadas = [];
-    const loadBloqueos = async () => {
-        const snap = await getDocs(collection(db, "bloqueos"));
-        snap.forEach(doc => bloqueadas.push(doc.data().fecha));
-    };
-    await loadBloqueos();
+    // 1. CARGAR BLOQUEOS
+    let bloqueos = [];
+    const snap = await getDocs(collection(db, "bloqueos"));
+    snap.forEach(d => bloqueos.push(d.data().fecha));
 
-    // 2. INICIALIZAR CALENDARIO CLIENTE
+    // 2. CONFIG CALENDARIO
     const fp = flatpickr("#fecha", {
         mode: "range",
         minDate: "today",
         dateFormat: "d/m/Y",
-        disable: bloqueadas,
+        disable: bloqueos,
         locale: { rangeSeparator: '  →  ' },
         onClose: (sel) => {
             if(sel.length === 2) noches = Math.round((sel[1]-sel[0])/86400000);
         }
     });
 
-    // 3. LÓGICA DE CÁLCULO
+    // 3. CÁLCULO
     document.getElementById("calcularBtn").onclick = () => {
         const f = document.getElementById("fecha").value;
         const s = parseInt(document.getElementById("s").value) || 0;
         const a = parseInt(document.getElementById("a").value) || 0;
-        const d = document.getElementById("d").value;
-        const t = document.getElementById("t").value;
+        const d = parseInt(document.getElementById("d").value) || 0;
+        const t = parseInt(document.getElementById("t").value) || 0;
         const p = document.getElementById("personas").value;
 
-        if(!f || noches === 0) return alert("Selecciona tus fechas.");
-        
-        const total = (s*1500 + a*2000 + d*2500 + t*2800) * noches;
+        if(!f || noches === 0) return alert("Selecciona tus fechas de viaje.");
+        if(s+a+d+t === 0) return alert("Selecciona al menos una habitación.");
+
+        const total = (s*1500 + a*2500 + d*3000 + t*4000) * noches;
         const adelanto = total * 0.5;
 
-        reservaActual = { fechas: f, noches, habitaciones: `S:${s} A:${a} D:${d} T:${t}`, personas: p, total, adelanto };
+        rData = { f, noches, habits: `S:${s} A:${a} D:${d} T:${t}`, p, total, adelanto };
 
         document.getElementById("resultado").classList.remove("hidden");
         document.getElementById("resumenContent").innerHTML = `
-            <p>📅 <b>${f}</b> (${noches} noches)</p>
-            <p>💰 Total: <b>RD$ ${total.toLocaleString()}</b></p>
-            <p style="color:green">💳 Adelanto: <b>RD$ ${adelanto.toLocaleString()}</b></p>
+            <h2 style="margin:10px 0; color:#0f172a">RD$ ${total.toLocaleString()}</h2>
+            <p style="font-size:0.8rem; color:#64748b">RESERVA: <b>RD$ ${adelanto.toLocaleString()}</b> (50%)</p>
+            <p style="font-size:0.9rem; margin-top:10px">📅 ${f} • 🌙 ${noches} noches</p>
         `;
     };
 
-    // 4. WHATSAPP & FIREBASE
+    // 4. WHATSAPP (Ajustado para celular)
     document.getElementById("btnConfirmar").onclick = async () => {
         const btn = document.getElementById("btnConfirmar");
-        btn.disabled = true; btn.innerText = "⏳...";
+        btn.disabled = true; btn.innerText = "⏳ GUARDANDO...";
 
-        await addDoc(collection(db, "reservas"), { ...reservaActual, creado: new Date().toLocaleString() });
+        await addDoc(collection(db, "reservas"), { ...rData, creado: new Date().toLocaleString() });
 
-        const msg = `🌴 *RESERVA ARIS*%0A📅 *Fechas:* ${reservaActual.fechas}%0A🌙 *Noches:* ${reservaActual.noches}%0A👥 *Pers:* ${reservaActual.personas}%0A💰 *Total:* RD$ ${reservaActual.total.toLocaleString()}%0A💳 *Adelanto:* RD$ ${reservaActual.adelanto.toLocaleString()}`;
-        window.open(`https://wa.me/18092823624?text=${msg}`);
-        location.reload();
+        const msg = `🌴 *VACACIONAL ARIS EDUARDO*%0A📅 *Estadía:* ${rData.f}%0A🌙 *Noches:* ${rData.noches}%0A👥 *Personas:* ${rData.p}%0A💰 *Total:* RD$ ${rData.total.toLocaleString()}%0A💳 *Adelanto:* RD$ ${rData.adelanto.toLocaleString()}`;
+        
+        window.location.href = `https://wa.me/18092823624?text=${msg}`;
     };
 
-    // 5. ADMIN SYSTEM
+    // 5. ADMIN
     const adminBtn = document.getElementById("adminBtn");
     const adminPanel = document.getElementById("adminPanel");
-    
     adminBtn.onclick = () => adminPanel.classList.toggle("hidden");
     document.getElementById("closeAdmin").onclick = () => adminPanel.classList.add("hidden");
 
     document.getElementById("loginAdmin").onclick = async () => {
-        if(document.getElementById("adminCode").value === "251210cej") {
+        if(document.getElementById("adminCode").value === "1234") { // <--- CAMBIA TU CLAVE AQUÍ
+            document.getElementById("adminLoginArea").classList.add("hidden");
             document.getElementById("adminContent").classList.remove("hidden");
-            document.getElementById("loginAdmin").classList.add("hidden");
-            document.getElementById("adminCode").classList.add("hidden");
-
-            // Cargar Reservas en Admin
+            
+            // Ver Reservas
             const q = query(collection(db, "reservas"), orderBy("creado", "desc"));
             const rSnap = await getDocs(q);
             let h = "";
-            rSnap.forEach(doc => {
-                const r = doc.data();
-                h += `<div class="reserva-item"><b>${r.fechas}</b><br>RD$ ${r.total.toLocaleString()}</div>`;
+            rSnap.forEach(d => {
+                const r = d.data();
+                h += `<div style="padding:10px; border-bottom:1px solid #eee; font-size:0.8rem">
+                        <b>${r.f}</b> - RD$ ${r.total.toLocaleString()}
+                      </div>`;
             });
-            document.getElementById("reservasLista").innerHTML = h || "Sin reservas.";
+            document.getElementById("reservasLista").innerHTML = h || "No hay reservas.";
         }
     };
 
-    // Bloqueo desde Admin
+    // Bloquear Fecha
     const fAdmin = flatpickr("#pickerBloqueo", { dateFormat: "d/m/Y" });
     document.getElementById("btnBloquear").onclick = async () => {
         const val = document.getElementById("pickerBloqueo").value;
         if(val) {
             await addDoc(collection(db, "bloqueos"), { fecha: val });
-            alert("Fecha bloqueada!");
+            alert("¡Fecha Bloqueada!");
             location.reload();
         }
     };
