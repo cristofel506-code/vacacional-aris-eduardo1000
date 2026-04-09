@@ -24,11 +24,11 @@
             <div class="booking-card">
                 <div class="card-header">
                     <h3>Reserva tu estancia</h3>
-                    <p>Completa los detalles para cotizar</p>
+                    <p>Calcula tu presupuesto al instante</p>
                 </div>
 
                 <div class="form-section">
-                    <label class="label-pro">¿Cuándo vienes?</label>
+                    <label class="label-pro">1. ¿Cuándo vienes?</label>
                     <div class="input-pro">
                         <span class="icon">📅</span>
                         <input type="text" id="fecha" placeholder="Entrada → Salida" readonly>
@@ -36,63 +36,55 @@
                 </div>
 
                 <div class="form-section">
-                    <label class="label-pro">Habitaciones disponibles</label>
+                    <label class="label-pro">2. Habitaciones (Máximos permitidos)</label>
                     <div class="room-grid">
                         <div class="room-box">
                             <div class="room-img" style="background-image: url('img/hero1.jpg')"></div>
                             <div class="room-info">
                                 <h4>Sencilla</h4>
-                                <p class="price">RD$ 1,500 <span>/noche</span></p>
-                                <div class="counter">
-                                    <input type="number" id="s" min="0" max="4" value="0">
-                                </div>
+                                <p class="price">RD$ 1,500</p>
+                                <input type="number" id="s" min="0" max="4" value="0">
                             </div>
                         </div>
                         <div class="room-box">
                             <div class="room-img" style="background-image: url('img/hero12.jpg')"></div>
                             <div class="room-info">
                                 <h4>Con Aire</h4>
-                                <p class="price">RD$ 2,500 <span>/noche</span></p>
-                                <div class="counter">
-                                    <input type="number" id="a" min="0" max="3" value="0">
-                                </div>
+                                <p class="price">RD$ 2,500</p>
+                                <input type="number" id="a" min="0" max="3" value="0">
                             </div>
                         </div>
                         <div class="room-box">
                             <div class="room-img" style="background-image: url('img/hero2.jpg')"></div>
                             <div class="room-info">
                                 <h4>Doble</h4>
-                                <p class="price">RD$ 3,000 <span>/noche</span></p>
-                                <div class="counter">
-                                    <input type="number" id="d" min="0" max="3" value="0">
-                                </div>
+                                <p class="price">RD$ 3,000</p>
+                                <input type="number" id="d" min="0" max="3" value="0">
                             </div>
                         </div>
                         <div class="room-box">
                             <div class="room-img" style="background-image: url('img/hero3.jpg')"></div>
                             <div class="room-info">
                                 <h4>Triple</h4>
-                                <p class="price">RD$ 4,000 <span>/noche</span></p>
-                                <div class="counter">
-                                    <input type="number" id="t" min="0" max="2" value="0">
-                                </div>
+                                <p class="price">RD$ 4,000</p>
+                                <input type="number" id="t" min="0" max="2" value="0">
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-section">
-                    <label class="label-pro">Cantidad de Personas</label>
+                    <label class="label-pro">3. Huéspedes</label>
                     <div class="input-pro">
                         <span class="icon">👥</span>
-                        <input type="number" id="personas" min="1" placeholder="Ej: 4">
+                        <input type="number" id="personas" min="1" placeholder="Ej: 4 personas">
                     </div>
                 </div>
 
                 <button id="calcularBtn" class="btn-main">Calcular Presupuesto</button>
 
                 <div id="resultado" class="ticket hidden">
-                    <div class="ticket-header">TU PRESUPUESTO</div>
+                    <div class="ticket-header">RESUMEN DE COTIZACIÓN</div>
                     <div id="resumenContent"></div>
                     <button id="btnConfirmar" class="btn-confirmar">CONFIRMAR POR WHATSAPP</button>
                 </div>
@@ -101,7 +93,7 @@
     </div>
 
     <div class="floats">
-        <a href="https://wa.me/18092823624?text=Hola,%20necesito%20información" class="float-wa">
+        <a href="https://wa.me/18092823624" class="float-wa" id="waDirecto">
             <div class="waves"></div>
             <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WA">
         </a>
@@ -111,21 +103,15 @@
     <div id="adminPanel" class="modal hidden">
         <div class="modal-content">
             <span id="closeAdmin" class="close">&times;</span>
-            <h3>Administración</h3>
+            <h3>Panel Admin</h3>
             <div id="adminLoginArea">
-                <input type="password" id="adminCode" placeholder="Código de acceso">
+                <input type="password" id="adminCode" placeholder="Código">
                 <button id="loginAdmin" class="btn-main">Entrar</button>
             </div>
             <div id="adminContent" class="hidden">
-                <div class="admin-tab">
-                    <h4>🚫 Bloquear Fecha</h4>
-                    <input type="text" id="pickerBloqueo" placeholder="Selecciona fecha">
-                    <button id="btnBloquear" class="btn-main" style="background: #e11d48;">Bloquear</button>
-                </div>
-                <div class="admin-tab">
-                    <h4>📋 Reservas Recientes</h4>
-                    <div id="reservasLista"></div>
-                </div>
+                <input type="text" id="pickerBloqueo" placeholder="Bloquear fecha">
+                <button id="btnBloquear" class="btn-main" style="background:#e11d48; margin-top:10px">Bloquear</button>
+                <div id="reservasLista" style="margin-top:20px"></div>
             </div>
         </div>
     </div>
