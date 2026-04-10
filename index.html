@@ -16,7 +16,7 @@
             <div class="header-content">
                 <div class="badge">PROPIEDAD VERIFICADA</div>
                 <h1>Vacacional Aris Eduardo</h1>
-                <p>📍 La Romana, Rep. Dominicana</p>
+                <p>📍 Villa Altagracia, KM 40 (Barrio Chono)</p>
             </div>
         </header>
 
@@ -30,7 +30,7 @@
                     <label class="label-pro">1. ¿Cuándo vienes?</label>
                     <div class="input-pro">
                         <span class="icon">📅</span>
-                        <input type="text" id="fecha" placeholder="Seleccionar fechas" readonly>
+                        <input type="text" id="fecha" placeholder="Toca para elegir fechas" readonly>
                     </div>
                 </div>
 
@@ -44,7 +44,7 @@
                                 <p class="price">RD$ 1,500 <span>/noche</span></p>
                             </div>
                             <div class="room-qty">
-                                <input type="number" id="s" min="0" max="4" value="0">
+                                <input type="number" id="s" class="qty-input" min="0" max="4" value="0">
                             </div>
                         </div>
                         <div class="room-item">
@@ -54,7 +54,7 @@
                                 <p class="price">RD$ 2,500 <span>/noche</span></p>
                             </div>
                             <div class="room-qty">
-                                <input type="number" id="a" min="0" max="3" value="0">
+                                <input type="number" id="a" class="qty-input" min="0" max="3" value="0">
                             </div>
                         </div>
                         <div class="room-item">
@@ -64,7 +64,7 @@
                                 <p class="price">RD$ 3,000 <span>/noche</span></p>
                             </div>
                             <div class="room-qty">
-                                <input type="number" id="d" min="0" max="3" value="0">
+                                <input type="number" id="d" class="qty-input" min="0" max="3" value="0">
                             </div>
                         </div>
                         <div class="room-item">
@@ -74,7 +74,7 @@
                                 <p class="price">RD$ 4,000 <span>/noche</span></p>
                             </div>
                             <div class="room-qty">
-                                <input type="number" id="t" min="0" max="2" value="0">
+                                <input type="number" id="t" class="qty-input" min="0" max="2" value="0">
                             </div>
                         </div>
                     </div>
@@ -120,4 +120,11 @@
                 <input type="text" id="pickerBloqueo" placeholder="Seleccionar fecha">
                 <button id="btnBloquear" class="btn-main" style="background:#dc2626; margin-top:10px">BLOQUEAR</button>
                 <hr>
-                <div id="reservasLista" style="max-height:200px; overflow-y:auto">
+                <div id="reservasLista" style="max-height:200px; overflow-y:auto"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
