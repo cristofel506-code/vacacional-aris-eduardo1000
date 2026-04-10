@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vacacional Aris Eduardo | VIP</title>
+    <title>Vacacional Aris Eduardo</title>
     
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
-    
+
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
 </head>
@@ -30,9 +30,9 @@
 
                 <div class="form-section">
                     <label class="label-pro">1. ¿Cuándo vienes?</label>
-                    <div class="input-pro" id="trigger-fecha" style="cursor: pointer;">
+                    <div class="input-pro">
                         <span class="icon">📅</span>
-                        <input type="text" id="fecha" placeholder="Toca aquí para elegir fechas" readonly style="pointer-events: none;">
+                        <input type="text" id="fecha" placeholder="Toca para elegir fechas">
                     </div>
                 </div>
 
@@ -42,38 +42,29 @@
                         <div class="room-item">
                             <div class="room-img" style="background-image: url('img/hero1.jpg')"></div>
                             <div class="room-info"><h4>Sencilla</h4><p class="price">RD$ 1,500</p></div>
-                            <div class="room-qty"><input type="number" id="s" class="qty-input" value="0" min="0"></div>
+                            <div class="room-qty"><input type="number" id="s" class="qty-input" value="0"></div>
                         </div>
                         <div class="room-item">
                             <div class="room-img" style="background-image: url('img/hero12.jpg')"></div>
                             <div class="room-info"><h4>Con Aire</h4><p class="price">RD$ 2,500</p></div>
-                            <div class="room-qty"><input type="number" id="a" class="qty-input" value="0" min="0"></div>
+                            <div class="room-qty"><input type="number" id="a" class="qty-input" value="0"></div>
                         </div>
                         <div class="room-item">
                             <div class="room-img" style="background-image: url('img/hero2.jpg')"></div>
                             <div class="room-info"><h4>Doble</h4><p class="price">RD$ 3,000</p></div>
-                            <div class="room-qty"><input type="number" id="d" class="qty-input" value="0" min="0"></div>
+                            <div class="room-qty"><input type="number" id="d" class="qty-input" value="0"></div>
                         </div>
                         <div class="room-item">
                             <div class="room-img" style="background-image: url('img/hero3.jpg')"></div>
                             <div class="room-info"><h4>Triple</h4><p class="price">RD$ 4,000</p></div>
-                            <div class="room-qty"><input type="number" id="t" class="qty-input" value="0" min="0"></div>
+                            <div class="room-qty"><input type="number" id="t" class="qty-input" value="0"></div>
                         </div>
-                    </div>
-                </div>
-
-                <div class="form-section">
-                    <label class="label-pro">3. Cantidad de Personas</label>
-                    <div class="input-pro">
-                        <span class="icon">👥</span>
-                        <input type="number" id="personas" placeholder="Ej: 5">
                     </div>
                 </div>
 
                 <button id="calcularBtn" class="btn-main">GENERAR PRESUPUESTO</button>
 
                 <div id="resultado" class="ticket hidden">
-                    <div class="ticket-header">DETALLE DE RESERVA</div>
                     <div id="resumenContent"></div>
                     <button id="btnConfirmar" class="btn-confirmar">CONFIRMAR POR WHATSAPP</button>
                 </div>
@@ -83,7 +74,6 @@
 
     <div class="floats">
         <a href="https://wa.me/18092823624" class="float-wa">
-            <div class="waves"></div>
             <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WA">
         </a>
     </div>
