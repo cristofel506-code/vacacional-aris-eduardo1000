@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vacacional Aris Eduardo | Reserva VIP</title>
+    <title>Vacacional Aris Eduardo | VIP</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
@@ -22,51 +22,58 @@
 
         <main class="content-body">
             <div class="booking-card">
-                <div class="card-header">
-                    <h3>Reserva tu estancia</h3>
-                    <p>Calcula tu presupuesto al instante</p>
+                <div class="promo-bar">
+                    ✨ Reserva con el <b>50%</b> de adelanto
                 </div>
 
                 <div class="form-section">
                     <label class="label-pro">1. ¿Cuándo vienes?</label>
                     <div class="input-pro">
                         <span class="icon">📅</span>
-                        <input type="text" id="fecha" placeholder="Entrada → Salida" readonly>
+                        <input type="text" id="fecha" placeholder="Seleccionar fechas" readonly>
                     </div>
                 </div>
 
                 <div class="form-section">
-                    <label class="label-pro">2. Habitaciones (Máximos permitidos)</label>
-                    <div class="room-grid">
-                        <div class="room-box">
+                    <label class="label-pro">2. Elige tus habitaciones</label>
+                    <div class="room-list">
+                        <div class="room-item">
                             <div class="room-img" style="background-image: url('img/hero1.jpg')"></div>
                             <div class="room-info">
                                 <h4>Sencilla</h4>
-                                <p class="price">RD$ 1,500</p>
+                                <p class="price">RD$ 1,500 <span>/noche</span></p>
+                            </div>
+                            <div class="room-qty">
                                 <input type="number" id="s" min="0" max="4" value="0">
                             </div>
                         </div>
-                        <div class="room-box">
+                        <div class="room-item">
                             <div class="room-img" style="background-image: url('img/hero12.jpg')"></div>
                             <div class="room-info">
                                 <h4>Con Aire</h4>
-                                <p class="price">RD$ 2,500</p>
+                                <p class="price">RD$ 2,500 <span>/noche</span></p>
+                            </div>
+                            <div class="room-qty">
                                 <input type="number" id="a" min="0" max="3" value="0">
                             </div>
                         </div>
-                        <div class="room-box">
+                        <div class="room-item">
                             <div class="room-img" style="background-image: url('img/hero2.jpg')"></div>
                             <div class="room-info">
                                 <h4>Doble</h4>
-                                <p class="price">RD$ 3,000</p>
+                                <p class="price">RD$ 3,000 <span>/noche</span></p>
+                            </div>
+                            <div class="room-qty">
                                 <input type="number" id="d" min="0" max="3" value="0">
                             </div>
                         </div>
-                        <div class="room-box">
+                        <div class="room-item">
                             <div class="room-img" style="background-image: url('img/hero3.jpg')"></div>
                             <div class="room-info">
                                 <h4>Triple</h4>
-                                <p class="price">RD$ 4,000</p>
+                                <p class="price">RD$ 4,000 <span>/noche</span></p>
+                            </div>
+                            <div class="room-qty">
                                 <input type="number" id="t" min="0" max="2" value="0">
                             </div>
                         </div>
@@ -74,17 +81,17 @@
                 </div>
 
                 <div class="form-section">
-                    <label class="label-pro">3. Huéspedes</label>
+                    <label class="label-pro">3. Cantidad de Personas</label>
                     <div class="input-pro">
                         <span class="icon">👥</span>
-                        <input type="number" id="personas" min="1" placeholder="Ej: 4 personas">
+                        <input type="number" id="personas" min="1" placeholder="Ej: 5">
                     </div>
                 </div>
 
-                <button id="calcularBtn" class="btn-main">Calcular Presupuesto</button>
+                <button id="calcularBtn" class="btn-main">GENERAR PRESUPUESTO</button>
 
                 <div id="resultado" class="ticket hidden">
-                    <div class="ticket-header">RESUMEN DE COTIZACIÓN</div>
+                    <div class="ticket-header">DETALLE DE RESERVA</div>
                     <div id="resumenContent"></div>
                     <button id="btnConfirmar" class="btn-confirmar">CONFIRMAR POR WHATSAPP</button>
                 </div>
@@ -93,7 +100,7 @@
     </div>
 
     <div class="floats">
-        <a href="https://wa.me/18092823624" class="float-wa" id="waDirecto">
+        <a href="https://wa.me/18092823624" class="float-wa">
             <div class="waves"></div>
             <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WA">
         </a>
@@ -103,19 +110,14 @@
     <div id="adminPanel" class="modal hidden">
         <div class="modal-content">
             <span id="closeAdmin" class="close">&times;</span>
-            <h3>Panel Admin</h3>
+            <h3 style="margin-top:0">Panel Admin</h3>
             <div id="adminLoginArea">
-                <input type="password" id="adminCode" placeholder="Código">
-                <button id="loginAdmin" class="btn-main">Entrar</button>
+                <input type="password" id="adminCode" placeholder="Código de acceso">
+                <button id="loginAdmin" class="btn-main" style="margin-top:10px">Entrar</button>
             </div>
             <div id="adminContent" class="hidden">
-                <input type="text" id="pickerBloqueo" placeholder="Bloquear fecha">
-                <button id="btnBloquear" class="btn-main" style="background:#e11d48; margin-top:10px">Bloquear</button>
-                <div id="reservasLista" style="margin-top:20px"></div>
-            </div>
-        </div>
-    </div>
-
-    <script type="module" src="script.js"></script>
-</body>
-</html>
+                <p style="font-size:0.8rem; color:#64748b">Bloquear fechas:</p>
+                <input type="text" id="pickerBloqueo" placeholder="Seleccionar fecha">
+                <button id="btnBloquear" class="btn-main" style="background:#dc2626; margin-top:10px">BLOQUEAR</button>
+                <hr>
+                <div id="reservasLista" style="max-height:200px; overflow-y:auto">
