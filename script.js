@@ -1,131 +1,102 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vacacional Aris Eduardo | VIP</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_blue.css">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    <div class="app-wrapper">
-        <header class="main-header">
-            <div class="header-overlay"></div>
-            <div class="header-content">
-                <div class="badge">PROPIEDAD VERIFICADA</div>
-                <h1>Vacacional Aris Eduardo</h1>
-                <p>📍 Villa Altagracia, KM 40 (Barrio Chono)</p>
+const firebaseConfig = {
+    apiKey: "AIzaSyDyIdyX_sH9FGB6VPL4Mz9dPlKmyMDYlFc",
+    authDomain: "vacacional-aris-543d8.firebaseapp.com",
+    projectId: "vacacional-aris-543d8",
+    storageBucket: "vacacional-aris-543d8.firebasestorage.app",
+    messagingSenderId: "745069402487",
+    appId: "1:745069402487:web:3c0d9828fbb52ca8e2e972"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let nochesGlobal = 0;
+
+// INICIALIZACIÓN FORZADA DEL CALENDARIO
+document.addEventListener("DOMContentLoaded", async () => {
+    
+    const bloqueos = [];
+    try {
+        const querySnapshot = await getDocs(collection(db, "bloqueos"));
+        querySnapshot.forEach((doc) => bloqueos.push(doc.data().fecha));
+    } catch (e) { console.log("Sin bloqueos"); }
+
+    const fp = flatpickr("#fecha", {
+        locale: "es",
+        mode: "range",
+        minDate: "today",
+        dateFormat: "d/m/Y",
+        disable: bloqueos,
+        clickOpens: true,
+        allowInput: false,
+        onClose: function(selectedDates) {
+            if (selectedDates.length === 2) {
+                const inicio = selectedDates[0];
+                const fin = selectedDates[1];
+                const diffTime = Math.abs(fin - inicio);
+                nochesGlobal = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            }
+        }
+    });
+
+    // Si el input falla, esto obliga al calendario a abrirse al tocar el recuadro
+    document.getElementById("trigger-fecha").onclick = () => {
+        fp.open();
+    };
+
+    // Lógica para quitar el 0
+    const inputsHab = document.querySelectorAll('.qty-input');
+    inputsHab.forEach(input => {
+        input.onclick = function() { if(this.value == "0") this.value = ""; };
+        input.onblur = function() { if(this.value == "") this.value = "0"; };
+    });
+
+    // Botón Calcular
+    document.getElementById("calcularBtn").onclick = () => {
+        const f = document.getElementById("fecha").value;
+        const s = parseInt(document.getElementById("s").value) || 0;
+        const a = parseInt(document.getElementById("a").value) || 0;
+        const d = parseInt(document.getElementById("d").value) || 0;
+        const t = parseInt(document.getElementById("t").value) || 0;
+        const p = document.getElementById("personas").value || 0;
+
+        if(!f || nochesGlobal === 0) return alert("Selecciona entrada y salida");
+        if(s+a+d+t === 0) return alert("Elige habitación");
+
+        const total = (s*1500 + a*2500 + d*3000 + t*4000) * nochesGlobal;
+        const adelanto = total * 0.5;
+
+        const ticket = document.getElementById("resultado");
+        ticket.classList.remove("hidden");
+        document.getElementById("resumenContent").innerHTML = `
+            <h2 style="margin:0; font-size:1.8rem;">RD$ ${total.toLocaleString()}</h2>
+            <p style="color:#64748b; margin-bottom:15px;">${f} (${nochesGlobal} noches)</p>
+            <div style="background:#f0fdf4; padding:15px; border-radius:12px; border:1px solid #bcf0da">
+                <span style="color:#16a34a; font-weight:800; font-size:0.8rem;">PAGO DE RESERVA (50%)</span>
+                <h3 style="margin:0; color:#16a34a;">RD$ ${adelanto.toLocaleString()}</h3>
             </div>
-        </header>
+        `;
+        ticket.scrollIntoView({ behavior: 'smooth' });
 
-        <main class="content-body">
-            <div class="booking-card">
-                <div class="promo-bar">
-                    ✨ Reserva con el <b>50%</b> de adelanto
-                </div>
+        // Confirmar WhatsApp
+        document.getElementById("btnConfirmar").onclick = async () => {
+            const btn = document.getElementById("btnConfirmar");
+            btn.innerText = "⏳ ESPERE...";
+            btn.disabled = true;
 
-                <div class="form-section">
-                    <label class="label-pro">1. ¿Cuándo vienes?</label>
-                    <div class="input-pro">
-                        <span class="icon">📅</span>
-                        <input type="text" id="fecha" placeholder="Toca para elegir fechas" readonly>
-                    </div>
-                </div>
+            await addDoc(collection(db, "reservas"), {
+                fecha: f,
+                noches: nochesGlobal,
+                total: total,
+                adelanto: adelanto,
+                creado: new Date().toLocaleString()
+            });
 
-                <div class="form-section">
-                    <label class="label-pro">2. Elige tus habitaciones</label>
-                    <div class="room-list">
-                        <div class="room-item">
-                            <div class="room-img" style="background-image: url('img/hero1.jpg')"></div>
-                            <div class="room-info">
-                                <h4>Sencilla</h4>
-                                <p class="price">RD$ 1,500 <span>/noche</span></p>
-                            </div>
-                            <div class="room-qty">
-                                <input type="number" id="s" class="qty-input" min="0" max="4" value="0">
-                            </div>
-                        </div>
-                        <div class="room-item">
-                            <div class="room-img" style="background-image: url('img/hero12.jpg')"></div>
-                            <div class="room-info">
-                                <h4>Con Aire</h4>
-                                <p class="price">RD$ 2,500 <span>/noche</span></p>
-                            </div>
-                            <div class="room-qty">
-                                <input type="number" id="a" class="qty-input" min="0" max="3" value="0">
-                            </div>
-                        </div>
-                        <div class="room-item">
-                            <div class="room-img" style="background-image: url('img/hero2.jpg')"></div>
-                            <div class="room-info">
-                                <h4>Doble</h4>
-                                <p class="price">RD$ 3,000 <span>/noche</span></p>
-                            </div>
-                            <div class="room-qty">
-                                <input type="number" id="d" class="qty-input" min="0" max="3" value="0">
-                            </div>
-                        </div>
-                        <div class="room-item">
-                            <div class="room-img" style="background-image: url('img/hero3.jpg')"></div>
-                            <div class="room-info">
-                                <h4>Triple</h4>
-                                <p class="price">RD$ 4,000 <span>/noche</span></p>
-                            </div>
-                            <div class="room-qty">
-                                <input type="number" id="t" class="qty-input" min="0" max="2" value="0">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-section">
-                    <label class="label-pro">3. Cantidad de Personas</label>
-                    <div class="input-pro">
-                        <span class="icon">👥</span>
-                        <input type="number" id="personas" min="1" placeholder="Ej: 5">
-                    </div>
-                </div>
-
-                <button id="calcularBtn" class="btn-main">GENERAR PRESUPUESTO</button>
-
-                <div id="resultado" class="ticket hidden">
-                    <div class="ticket-header">DETALLE DE RESERVA</div>
-                    <div id="resumenContent"></div>
-                    <button id="btnConfirmar" class="btn-confirmar">CONFIRMAR POR WHATSAPP</button>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <div class="floats">
-        <a href="https://wa.me/18092823624" class="float-wa">
-            <div class="waves"></div>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WA">
-        </a>
-        <div id="adminBtn" class="float-admin">⚙️</div>
-    </div>
-
-    <div id="adminPanel" class="modal hidden">
-        <div class="modal-content">
-            <span id="closeAdmin" class="close">&times;</span>
-            <h3 style="margin-top:0">Panel Admin</h3>
-            <div id="adminLoginArea">
-                <input type="password" id="adminCode" placeholder="Código">
-                <button id="loginAdmin" class="btn-main" style="margin-top:10px">Entrar</button>
-            </div>
-            <div id="adminContent" class="hidden">
-                <input type="text" id="pickerBloqueo" placeholder="Bloquear fecha">
-                <button id="btnBloquear" class="btn-main" style="background:#dc2626; margin-top:10px">BLOQUEAR</button>
-                <div id="reservasLista" style="max-height:200px; overflow-y:auto; margin-top:15px"></div>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
-    <script type="module" src="script.js"></script>
-</body>
-</html>
+            const msg = `🌴 *RESERVA ARIS*%0A📍 Villa Altagracia, KM 40%0A📅 *Fechas:* ${f}%0A🌙 *Noches:* ${nochesGlobal}%0A👥 *Personas:* ${p}%0A💰 *Total:* RD$ ${total.toLocaleString()}%0A💳 *Adelanto (50%):* RD$ ${adelanto.toLocaleString()}`;
+            window.location.href = `https://wa.me/18092823624?text=${msg}`;
+        };
+    };
+});
