@@ -1,104 +1,131 @@
-import flatpickr from "https://cdn.jsdelivr.net/npm/flatpickr/+esm";
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vacacional Aris Eduardo | VIP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_blue.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-const firebaseConfig = {
-    apiKey: "AIzaSyDyIdyX_sH9FGB6VPL4Mz9dPlKmyMDYlFc",
-    authDomain: "vacacional-aris-543d8.firebaseapp.com",
-    projectId: "vacacional-aris-543d8",
-    storageBucket: "vacacional-aris-543d8.firebasestorage.app",
-    messagingSenderId: "745069402487",
-    appId: "1:745069402487:web:3c0d9828fbb52ca8e2e972"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-let noches = 0;
-let resumen = null;
-
-document.addEventListener("DOMContentLoaded", async () => {
-    
-    const bloqueadas = [];
-    try {
-        const snap = await getDocs(collection(db, "bloqueos"));
-        snap.forEach(d => bloqueadas.push(d.data().fecha));
-    } catch(e) {}
-
-    flatpickr("#fecha", {
-        mode: "range",
-        minDate: "today",
-        dateFormat: "d/m/Y",
-        disable: bloqueadas,
-        disableMobile: "true",
-        locale: { rangeSeparator: ' → ' },
-        onClose: (sel) => {
-            if(sel.length === 2) noches = Math.round((sel[1]-sel[0])/86400000);
-        }
-    });
-
-    const inputsQty = document.querySelectorAll('.qty-input');
-    inputsQty.forEach(input => {
-        input.addEventListener('focus', function() { if (this.value === "0") this.value = ""; });
-        input.addEventListener('blur', function() { if (this.value === "") this.value = "0"; });
-    });
-
-    document.getElementById("calcularBtn").onclick = () => {
-        const f = document.getElementById("fecha").value;
-        const s = parseInt(document.getElementById("s").value) || 0;
-        const a = parseInt(document.getElementById("a").value) || 0;
-        const d = parseInt(document.getElementById("d").value) || 0;
-        const t = parseInt(document.getElementById("t").value) || 0;
-        const p = document.getElementById("personas").value || 0;
-
-        if(!f || noches === 0) return alert("Selecciona tus fechas.");
-        if(s+a+d+t === 0) return alert("Elige al menos 1 habitación.");
-
-        const total = (s*1500 + a*2500 + d*3000 + t*4000) * noches;
-        const adelanto = total * 0.50;
-
-        resumen = { f, noches, h: `S:${s} A:${a} D:${d} T:${t}`, p, total, adelanto };
-
-        document.getElementById("resultado").classList.remove("hidden");
-        document.getElementById("resumenContent").innerHTML = `
-            <h2 style="margin:5px 0; color:#0f172a; font-weight:800">RD$ ${total.toLocaleString()}</h2>
-            <p style="font-size:0.85rem; color:#64748b; margin-bottom:15px">${f} • ${noches} noches</p>
-            <div style="background:#fff; border:1px solid #e2e8f0; padding:12px; border-radius:12px">
-                <span style="font-size:0.75rem; font-weight:700; color:#16a34a">ADELANTO (50%)</span>
-                <h3 style="margin:0; color:#16a34a">RD$ ${adelanto.toLocaleString()}</h3>
+    <div class="app-wrapper">
+        <header class="main-header">
+            <div class="header-overlay"></div>
+            <div class="header-content">
+                <div class="badge">PROPIEDAD VERIFICADA</div>
+                <h1>Vacacional Aris Eduardo</h1>
+                <p>📍 Villa Altagracia, KM 40 (Barrio Chono)</p>
             </div>
-        `;
-        document.getElementById("resultado").scrollIntoView({ behavior: 'smooth' });
-    };
+        </header>
 
-    document.getElementById("btnConfirmar").onclick = async () => {
-        const b = document.getElementById("btnConfirmar");
-        b.disabled = true; b.innerText = "⏳ PROCESANDO...";
-        await addDoc(collection(db, "reservas"), { ...resumen, creado: new Date().toLocaleString() });
-        
-        // Mensaje con la nueva ubicación
-        const msg = `🌴 *RESERVA VACACIONAL ARIS*%0A📍 *Lugar:* Villa Altagracia, KM 40 (Chono)%0A📅 *Fechas:* ${resumen.f}%0A🌙 *Noches:* ${resumen.noches}%0A👥 *Personas:* ${resumen.p}%0A💰 *Total:* RD$ ${resumen.total.toLocaleString()}%0A💳 *Adelanto (50%):* RD$ ${resumen.adelanto.toLocaleString()}`;
-        window.location.href = `https://wa.me/18092823624?text=${msg}`;
-    };
+        <main class="content-body">
+            <div class="booking-card">
+                <div class="promo-bar">
+                    ✨ Reserva con el <b>50%</b> de adelanto
+                </div>
 
-    document.getElementById("adminBtn").onclick = () => document.getElementById("adminPanel").classList.toggle("hidden");
-    document.getElementById("closeAdmin").onclick = () => document.getElementById("adminPanel").classList.add("hidden");
+                <div class="form-section">
+                    <label class="label-pro">1. ¿Cuándo vienes?</label>
+                    <div class="input-pro">
+                        <span class="icon">📅</span>
+                        <input type="text" id="fecha" placeholder="Toca para elegir fechas" readonly>
+                    </div>
+                </div>
 
-    document.getElementById("loginAdmin").onclick = async () => {
-        if(document.getElementById("adminCode").value === "1234") {
-            document.getElementById("adminLoginArea").classList.add("hidden");
-            document.getElementById("adminContent").classList.remove("hidden");
-            const q = query(collection(db, "reservas"), orderBy("creado", "desc"));
-            const rSnap = await getDocs(q);
-            let h = "";
-            rSnap.forEach(d => h += `<div style="font-size:0.75rem; border-bottom:1px solid #eee; padding:8px"><b>${d.data().f}</b><br>RD$ ${d.data().total.toLocaleString()}</div>`);
-            document.getElementById("reservasLista").innerHTML = h || "No hay reservas.";
-        }
-    };
+                <div class="form-section">
+                    <label class="label-pro">2. Elige tus habitaciones</label>
+                    <div class="room-list">
+                        <div class="room-item">
+                            <div class="room-img" style="background-image: url('img/hero1.jpg')"></div>
+                            <div class="room-info">
+                                <h4>Sencilla</h4>
+                                <p class="price">RD$ 1,500 <span>/noche</span></p>
+                            </div>
+                            <div class="room-qty">
+                                <input type="number" id="s" class="qty-input" min="0" max="4" value="0">
+                            </div>
+                        </div>
+                        <div class="room-item">
+                            <div class="room-img" style="background-image: url('img/hero12.jpg')"></div>
+                            <div class="room-info">
+                                <h4>Con Aire</h4>
+                                <p class="price">RD$ 2,500 <span>/noche</span></p>
+                            </div>
+                            <div class="room-qty">
+                                <input type="number" id="a" class="qty-input" min="0" max="3" value="0">
+                            </div>
+                        </div>
+                        <div class="room-item">
+                            <div class="room-img" style="background-image: url('img/hero2.jpg')"></div>
+                            <div class="room-info">
+                                <h4>Doble</h4>
+                                <p class="price">RD$ 3,000 <span>/noche</span></p>
+                            </div>
+                            <div class="room-qty">
+                                <input type="number" id="d" class="qty-input" min="0" max="3" value="0">
+                            </div>
+                        </div>
+                        <div class="room-item">
+                            <div class="room-img" style="background-image: url('img/hero3.jpg')"></div>
+                            <div class="room-info">
+                                <h4>Triple</h4>
+                                <p class="price">RD$ 4,000 <span>/noche</span></p>
+                            </div>
+                            <div class="room-qty">
+                                <input type="number" id="t" class="qty-input" min="0" max="2" value="0">
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-    flatpickr("#pickerBloqueo", { dateFormat: "d/m/Y" });
-    document.getElementById("btnBloquear").onclick = async () => {
-        const val = document.getElementById("pickerBloqueo").value;
-        if(val) { await addDoc(collection(db, "bloqueos"), { fecha: val }); location.reload(); }
-    };
-});
+                <div class="form-section">
+                    <label class="label-pro">3. Cantidad de Personas</label>
+                    <div class="input-pro">
+                        <span class="icon">👥</span>
+                        <input type="number" id="personas" min="1" placeholder="Ej: 5">
+                    </div>
+                </div>
+
+                <button id="calcularBtn" class="btn-main">GENERAR PRESUPUESTO</button>
+
+                <div id="resultado" class="ticket hidden">
+                    <div class="ticket-header">DETALLE DE RESERVA</div>
+                    <div id="resumenContent"></div>
+                    <button id="btnConfirmar" class="btn-confirmar">CONFIRMAR POR WHATSAPP</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="floats">
+        <a href="https://wa.me/18092823624" class="float-wa">
+            <div class="waves"></div>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WA">
+        </a>
+        <div id="adminBtn" class="float-admin">⚙️</div>
+    </div>
+
+    <div id="adminPanel" class="modal hidden">
+        <div class="modal-content">
+            <span id="closeAdmin" class="close">&times;</span>
+            <h3 style="margin-top:0">Panel Admin</h3>
+            <div id="adminLoginArea">
+                <input type="password" id="adminCode" placeholder="Código">
+                <button id="loginAdmin" class="btn-main" style="margin-top:10px">Entrar</button>
+            </div>
+            <div id="adminContent" class="hidden">
+                <input type="text" id="pickerBloqueo" placeholder="Bloquear fecha">
+                <button id="btnBloquear" class="btn-main" style="background:#dc2626; margin-top:10px">BLOQUEAR</button>
+                <div id="reservasLista" style="max-height:200px; overflow-y:auto; margin-top:15px"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+    <script type="module" src="script.js"></script>
+</body>
+</html>
