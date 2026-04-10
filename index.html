@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Vacacional Aris Eduardo | VIP</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_blue.css">
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
 </head>
 <body>
 
@@ -17,21 +20,19 @@
             <div class="header-content">
                 <div class="badge">PROPIEDAD VERIFICADA</div>
                 <h1>Vacacional Aris Eduardo</h1>
-                <p>📍 Villa Altagracia, KM 40 (Barrio Chono)</p>
+                <p>📍 Villa Altagracia, KM 40 (Chono)</p>
             </div>
         </header>
 
         <main class="content-body">
             <div class="booking-card">
-                <div class="promo-bar">
-                    ✨ Reserva con el <b>50%</b> de adelanto
-                </div>
+                <div class="promo-bar">✨ Reserva con el <b>50%</b> de adelanto</div>
 
                 <div class="form-section">
                     <label class="label-pro">1. ¿Cuándo vienes?</label>
-                    <div class="input-pro">
+                    <div class="input-pro" id="trigger-fecha" style="cursor: pointer;">
                         <span class="icon">📅</span>
-                        <input type="text" id="fecha" placeholder="Toca para elegir fechas" readonly>
+                        <input type="text" id="fecha" placeholder="Toca aquí para elegir fechas" readonly style="pointer-events: none;">
                     </div>
                 </div>
 
@@ -40,43 +41,23 @@
                     <div class="room-list">
                         <div class="room-item">
                             <div class="room-img" style="background-image: url('img/hero1.jpg')"></div>
-                            <div class="room-info">
-                                <h4>Sencilla</h4>
-                                <p class="price">RD$ 1,500 <span>/noche</span></p>
-                            </div>
-                            <div class="room-qty">
-                                <input type="number" id="s" class="qty-input" min="0" max="4" value="0">
-                            </div>
+                            <div class="room-info"><h4>Sencilla</h4><p class="price">RD$ 1,500</p></div>
+                            <div class="room-qty"><input type="number" id="s" class="qty-input" value="0" min="0"></div>
                         </div>
                         <div class="room-item">
                             <div class="room-img" style="background-image: url('img/hero12.jpg')"></div>
-                            <div class="room-info">
-                                <h4>Con Aire</h4>
-                                <p class="price">RD$ 2,500 <span>/noche</span></p>
-                            </div>
-                            <div class="room-qty">
-                                <input type="number" id="a" class="qty-input" min="0" max="3" value="0">
-                            </div>
+                            <div class="room-info"><h4>Con Aire</h4><p class="price">RD$ 2,500</p></div>
+                            <div class="room-qty"><input type="number" id="a" class="qty-input" value="0" min="0"></div>
                         </div>
                         <div class="room-item">
                             <div class="room-img" style="background-image: url('img/hero2.jpg')"></div>
-                            <div class="room-info">
-                                <h4>Doble</h4>
-                                <p class="price">RD$ 3,000 <span>/noche</span></p>
-                            </div>
-                            <div class="room-qty">
-                                <input type="number" id="d" class="qty-input" min="0" max="3" value="0">
-                            </div>
+                            <div class="room-info"><h4>Doble</h4><p class="price">RD$ 3,000</p></div>
+                            <div class="room-qty"><input type="number" id="d" class="qty-input" value="0" min="0"></div>
                         </div>
                         <div class="room-item">
                             <div class="room-img" style="background-image: url('img/hero3.jpg')"></div>
-                            <div class="room-info">
-                                <h4>Triple</h4>
-                                <p class="price">RD$ 4,000 <span>/noche</span></p>
-                            </div>
-                            <div class="room-qty">
-                                <input type="number" id="t" class="qty-input" min="0" max="2" value="0">
-                            </div>
+                            <div class="room-info"><h4>Triple</h4><p class="price">RD$ 4,000</p></div>
+                            <div class="room-qty"><input type="number" id="t" class="qty-input" value="0" min="0"></div>
                         </div>
                     </div>
                 </div>
@@ -85,7 +66,7 @@
                     <label class="label-pro">3. Cantidad de Personas</label>
                     <div class="input-pro">
                         <span class="icon">👥</span>
-                        <input type="number" id="personas" min="1" placeholder="Ej: 5">
+                        <input type="number" id="personas" placeholder="Ej: 5">
                     </div>
                 </div>
 
@@ -105,27 +86,8 @@
             <div class="waves"></div>
             <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WA">
         </a>
-        <div id="adminBtn" class="float-admin">⚙️</div>
     </div>
 
-    <div id="adminPanel" class="modal hidden">
-        <div class="modal-content">
-            <span id="closeAdmin" class="close">&times;</span>
-            <h3 style="margin-top:0">Panel Admin</h3>
-            <div id="adminLoginArea">
-                <input type="password" id="adminCode" placeholder="Código">
-                <button id="loginAdmin" class="btn-main" style="margin-top:10px">Entrar</button>
-            </div>
-            <div id="adminContent" class="hidden">
-                <input type="text" id="pickerBloqueo" placeholder="Bloquear fecha">
-                <button id="btnBloquear" class="btn-main" style="background:#dc2626; margin-top:10px">BLOQUEAR</button>
-                <div id="reservasLista" style="max-height:200px; overflow-y:auto; margin-top:15px"></div>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
     <script type="module" src="script.js"></script>
 </body>
 </html>
