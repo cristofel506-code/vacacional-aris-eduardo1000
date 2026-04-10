@@ -1,152 +1,38 @@
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-:root {
-    --primary: #0f172a;
-    --accent: #c5a059;
-    --success: #16a34a;
-    --bg: #f1f5f9;
-}
-
-body {
-    margin: 0;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background-color: var(--bg);
-    color: var(--primary);
-    overflow-x: hidden;
-}
-
-.app-wrapper {
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto;
-    background: #fff;
-    min-height: 100vh;
-}
-
-.main-header {
-    height: 180px;
-    background: url('img/hero.jpg') center/cover;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-}
-
+:root { --primary: #0f172a; --accent: #c5a059; --success: #16a34a; --bg: #f1f5f9; }
+body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); color: var(--primary); overflow-x: hidden; }
+.app-wrapper { width: 100%; max-width: 500px; margin: 0 auto; background: #fff; min-height: 100vh; }
+.main-header { height: 180px; background: url('img/hero.jpg') center/cover; position: relative; display: flex; align-items: center; justify-content: center; color: white; }
 .header-overlay { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 100%); }
-.header-content { position: relative; z-index: 10; text-align: center; }
+.header-content { position: relative; z-index: 10; text-align: center; padding: 0 15px; }
 .header-content h1 { font-size: 1.4rem; margin: 5px 0; font-weight: 800; }
-.badge { background: var(--accent); font-size: 0.6rem; padding: 4px 12px; border-radius: 50px; font-weight: 800; margin-bottom: 5px; display: inline-block; }
-
+.badge { background: var(--accent); font-size: 0.6rem; padding: 4px 12px; border-radius: 50px; font-weight: 800; display: inline-block; }
 .content-body { padding: 15px; margin-top: -30px; position: relative; }
 .booking-card { background: white; border-radius: 25px; padding: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.08); }
-
-.promo-bar {
-    background: #f0fdf4;
-    color: var(--success);
-    padding: 10px;
-    border-radius: 12px;
-    text-align: center;
-    font-size: 0.85rem;
-    font-weight: 700;
-    margin-bottom: 20px;
-}
-
+.promo-bar { background: #f0fdf4; color: var(--success); padding: 10px; border-radius: 12px; text-align: center; font-size: 0.85rem; font-weight: 700; margin-bottom: 20px; }
 .form-section { margin-bottom: 20px; }
 .label-pro { display: block; font-weight: 800; font-size: 0.75rem; color: #94a3b8; margin-bottom: 10px; text-transform: uppercase; }
-
 .input-pro { background: #f8fafc; border-radius: 12px; padding: 12px; display: flex; align-items: center; border: 1px solid #e2e8f0; }
 .input-pro input { border: none; background: transparent; width: 100%; font-size: 1rem; font-weight: 600; font-family: inherit; outline: none; }
-.input-pro .icon { margin-right: 10px; }
-
-/* Lista de Habitaciones Horizontal */
 .room-list { display: flex; flex-direction: column; gap: 10px; }
-.room-item {
-    display: flex;
-    align-items: center;
-    background: #f8fafc;
-    border-radius: 16px;
-    overflow: hidden;
-    border: 1px solid #e2e8f0;
-}
-.room-img { width: 70px; height: 70px; background-size: cover; background-position: center; }
+.room-item { display: flex; align-items: center; background: #f8fafc; border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0; }
+.room-img { width: 70px; height: 70px; background-size: cover; background-position: center; flex-shrink: 0; }
 .room-info { flex: 1; padding: 0 15px; }
 .room-info h4 { margin: 0; font-size: 0.9rem; font-weight: 700; }
 .price { color: var(--success); font-weight: 800; font-size: 0.8rem; margin: 2px 0; }
 .price span { color: #94a3b8; font-weight: 400; font-size: 0.7rem; }
-.room-qty input {
-    width: 50px;
-    height: 40px;
-    margin-right: 12px;
-    border: 1px solid #cbd5e1;
-    border-radius: 10px;
-    text-align: center;
-    font-weight: 800;
-    font-size: 1rem;
-}
-
-.btn-main {
-    width: 100%;
-    background: var(--primary);
-    color: white;
-    padding: 18px;
-    border: none;
-    border-radius: 18px;
-    font-weight: 800;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.ticket {
-    background: #f8fafc;
-    border: 2px dashed #e2e8f0;
-    border-radius: 20px;
-    padding: 20px;
-    margin-top: 20px;
-    text-align: center;
-}
-.ticket-header { font-size: 0.7rem; font-weight: 800; color: #94a3b8; letter-spacing: 2px; margin-bottom: 10px; }
-.btn-confirmar {
-    background: #25d366;
-    color: white;
-    width: 100%;
-    padding: 16px;
-    border-radius: 15px;
-    border: none;
-    font-weight: 800;
-    margin-top: 15px;
-    cursor: pointer;
-}
-
-/* Floats Corregidos */
+.qty-input { width: 55px; height: 40px; margin-right: 12px; border: 1px solid #cbd5e1; border-radius: 10px; text-align: center; font-weight: 800; font-size: 1.1rem !important; -webkit-appearance: none; }
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.btn-main { width: 100%; background: var(--primary); color: white; padding: 18px; border: none; border-radius: 18px; font-weight: 800; font-size: 0.9rem; cursor: pointer; }
+.ticket { background: #f8fafc; border: 2px dashed #e2e8f0; border-radius: 20px; padding: 20px; margin-top: 20px; text-align: center; }
+.btn-confirmar { background: #25d366; color: white; width: 100%; padding: 16px; border-radius: 15px; border: none; font-weight: 800; margin-top: 15px; cursor: pointer; }
 .floats { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 999; }
-.float-wa { 
-    width: 50px; 
-    height: 50px; 
-    background: #25d366; 
-    border-radius: 50%; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    box-shadow: 0 8px 20px rgba(37,211,102,0.4);
-    position: relative;
-}
-.float-wa img { width: 26px; position: relative; z-index: 5; }
-.waves { 
-    position: absolute; width: 100%; height: 100%; background: #25d366; 
-    border-radius: 50%; animation: pulse 2s infinite; opacity: 0.5; 
-}
+.float-wa { width: 50px; height: 50px; background: #25d366; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(37,211,102,0.4); position: relative; }
+.float-wa img { width: 26px; z-index: 5; position: relative; }
+.waves { position: absolute; width: 100%; height: 100%; background: #25d366; border-radius: 50%; animation: pulse 2s infinite; opacity: 0.5; }
 @keyframes pulse { 0% {transform: scale(1); opacity: 0.5;} 100% {transform: scale(1.6); opacity: 0;} }
-
-.float-admin { 
-    width: 35px; height: 35px; background: white; border-radius: 50%; 
-    display: flex; align-items: center; justify-content: center; 
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer; color: #94a3b8;
-    margin-left: auto;
-}
-
-/* Modals */
+.float-admin { width: 35px; height: 35px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer; color: #94a3b8; margin-left: auto; }
+.flatpickr-calendar { z-index: 99999 !important; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
 .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; backdrop-filter: blur(4px); }
 .modal-content { background: white; padding: 25px; border-radius: 25px; width: 100%; max-width: 350px; position: relative; }
 .close { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #94a3b8; }
