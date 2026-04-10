@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Vacacional Aris Eduardo | VIP</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_blue.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -112,19 +113,19 @@
             <span id="closeAdmin" class="close">&times;</span>
             <h3 style="margin-top:0">Panel Admin</h3>
             <div id="adminLoginArea">
-                <input type="password" id="adminCode" placeholder="Código de acceso">
+                <input type="password" id="adminCode" placeholder="Código">
                 <button id="loginAdmin" class="btn-main" style="margin-top:10px">Entrar</button>
             </div>
             <div id="adminContent" class="hidden">
-                <p style="font-size:0.8rem; color:#64748b">Bloquear fechas:</p>
-                <input type="text" id="pickerBloqueo" placeholder="Seleccionar fecha">
+                <input type="text" id="pickerBloqueo" placeholder="Bloquear fecha">
                 <button id="btnBloquear" class="btn-main" style="background:#dc2626; margin-top:10px">BLOQUEAR</button>
-                <hr>
-                <div id="reservasLista" style="max-height:200px; overflow-y:auto"></div>
+                <div id="reservasLista" style="max-height:200px; overflow-y:auto; margin-top:15px"></div>
             </div>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
     <script type="module" src="script.js"></script>
 </body>
 </html>
