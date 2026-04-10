@@ -19,24 +19,30 @@ let resumen = null;
 
 document.addEventListener("DOMContentLoaded", async () => {
     
-    // 1. CARGAR BLOQUEOS
     const bloqueadas = [];
-    const snap = await getDocs(collection(db, "bloqueos"));
-    snap.forEach(d => bloqueadas.push(d.data().fecha));
+    try {
+        const snap = await getDocs(collection(db, "bloqueos"));
+        snap.forEach(d => bloqueadas.push(d.data().fecha));
+    } catch(e) {}
 
-    // 2. CALENDARIO
     flatpickr("#fecha", {
         mode: "range",
         minDate: "today",
         dateFormat: "d/m/Y",
         disable: bloqueadas,
+        disableMobile: "true",
         locale: { rangeSeparator: ' → ' },
         onClose: (sel) => {
             if(sel.length === 2) noches = Math.round((sel[1]-sel[0])/86400000);
         }
     });
 
-    // 3. CÁLCULO
+    const inputsQty = document.querySelectorAll('.qty-input');
+    inputsQty.forEach(input => {
+        input.addEventListener('focus', function() { if (this.value === "0") this.value = ""; });
+        input.addEventListener('blur', function() { if (this.value === "") this.value = "0"; });
+    });
+
     document.getElementById("calcularBtn").onclick = () => {
         const f = document.getElementById("fecha").value;
         const s = parseInt(document.getElementById("s").value) || 0;
@@ -45,11 +51,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         const t = parseInt(document.getElementById("t").value) || 0;
         const p = document.getElementById("personas").value || 0;
 
-        if(!f || noches === 0) return alert("Selecciona tus fechas de llegada y salida.");
-        if(s+a+d+t === 0) return alert("Selecciona al menos 1 habitación.");
+        if(!f || noches === 0) return alert("Selecciona tus fechas.");
+        if(s+a+d+t === 0) return alert("Elige al menos 1 habitación.");
 
         const total = (s*1500 + a*2500 + d*3000 + t*4000) * noches;
-        const adelanto = total * 0.50; // <--- VOLVIMOS AL 50%
+        const adelanto = total * 0.50;
 
         resumen = { f, noches, h: `S:${s} A:${a} D:${d} T:${t}`, p, total, adelanto };
 
@@ -58,24 +64,23 @@ document.addEventListener("DOMContentLoaded", async () => {
             <h2 style="margin:5px 0; color:#0f172a; font-weight:800">RD$ ${total.toLocaleString()}</h2>
             <p style="font-size:0.85rem; color:#64748b; margin-bottom:15px">${f} • ${noches} noches</p>
             <div style="background:#fff; border:1px solid #e2e8f0; padding:12px; border-radius:12px">
-                <span style="font-size:0.75rem; font-weight:700; color:var(--success)">ADELANTO (50%)</span>
-                <h3 style="margin:0; color:var(--success)">RD$ ${adelanto.toLocaleString()}</h3>
+                <span style="font-size:0.75rem; font-weight:700; color:#16a34a">ADELANTO (50%)</span>
+                <h3 style="margin:0; color:#16a34a">RD$ ${adelanto.toLocaleString()}</h3>
             </div>
         `;
+        document.getElementById("resultado").scrollIntoView({ behavior: 'smooth' });
     };
 
-    // 4. WHATSAPP
     document.getElementById("btnConfirmar").onclick = async () => {
         const b = document.getElementById("btnConfirmar");
         b.disabled = true; b.innerText = "⏳ PROCESANDO...";
-        
         await addDoc(collection(db, "reservas"), { ...resumen, creado: new Date().toLocaleString() });
-
-        const msg = `🌴 *NUEVA RESERVA ARIS*%0A📅 *Fechas:* ${resumen.f}%0A🌙 *Noches:* ${resumen.noches}%0A👥 *Personas:* ${resumen.p}%0A💰 *Total:* RD$ ${resumen.total.toLocaleString()}%0A💳 *Adelanto (50%):* RD$ ${resumen.adelanto.toLocaleString()}`;
+        
+        // Mensaje con la nueva ubicación
+        const msg = `🌴 *RESERVA VACACIONAL ARIS*%0A📍 *Lugar:* Villa Altagracia, KM 40 (Chono)%0A📅 *Fechas:* ${resumen.f}%0A🌙 *Noches:* ${resumen.noches}%0A👥 *Personas:* ${resumen.p}%0A💰 *Total:* RD$ ${resumen.total.toLocaleString()}%0A💳 *Adelanto (50%):* RD$ ${resumen.adelanto.toLocaleString()}`;
         window.location.href = `https://wa.me/18092823624?text=${msg}`;
     };
 
-    // 5. ADMIN
     document.getElementById("adminBtn").onclick = () => document.getElementById("adminPanel").classList.toggle("hidden");
     document.getElementById("closeAdmin").onclick = () => document.getElementById("adminPanel").classList.add("hidden");
 
