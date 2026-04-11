@@ -96,7 +96,7 @@ window.toggleAdmin = () => {
     const adminPanel = document.getElementById("adminPanel");
     if (adminPanel.classList.contains("hidden")) {
         const pass = prompt("Clave de Admin:");
-        if (pass === "1234") adminPanel.classList.remove("hidden");
+        if (pass === "251210cej") adminPanel.classList.remove("hidden");
     } else {
         adminPanel.classList.add("hidden");
     }
