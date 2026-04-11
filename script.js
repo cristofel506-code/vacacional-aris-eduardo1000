@@ -16,7 +16,7 @@ let nochesGlobal = 0;
 let fp;
 
 // INICIALIZAR CALENDARIO (Versión mejorada sin teclado)
- function setupCalendar(blockedDates = []) {
+function setupCalendar(blockedDates = []) {
     fp = flatpickr("#fecha", {
         locale: "es",
         mode: "range",
@@ -37,6 +37,11 @@ let fp;
         }
     });
 }
+
+// Abrir el calendario al tocar cualquier parte del recuadro
+document.getElementById('trigger-calendar').onclick = () => {
+    fp.open();
+};
 
 // Abrir el calendario al tocar cualquier parte del recuadro
 document.getElementById('trigger-calendar').onclick = () => {
