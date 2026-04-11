@@ -26,8 +26,7 @@
 
         <main class="content-body">
             <div class="booking-card">
-                <div class="promo-bar">✨ Reserva con el <b>50%</b>
-                </div>
+                <div class="promo-bar">✨ Reserva con el <b>50%</b></div>
 
                 <div class="form-section">
                     <label class="label-pro">1. ¿Cuándo vienes?</label>
@@ -42,23 +41,23 @@
                     <div class="room-list">
                         <div class="room-item">
                             <div class="room-img" style="background-image: url('img/hero1.jpg')"></div>
-                            <div class="room-info"><h4>Sencilla con abanico</h4><p class="price">RD$ 1,500</p></div>
-                            <div class="room-qty"><input type="number" id="s" class="qty-input" value="0"></div>
+                            <div class="room-info"><h4>Sencilla abanico</h4><p class="price">RD$ 1,500</p></div>
+                            <input type="number" id="s" class="qty-input" value="0">
                         </div>
                         <div class="room-item">
                             <div class="room-img" style="background-image: url('img/hero12.jpg')"></div>
-                            <div class="room-info"><h4>Sencilla Con Aire</h4><p class="price">RD$ 2,500</p></div>
-                            <div class="room-qty"><input type="number" id="a" class="qty-input" value="0"></div>
+                            <div class="room-info"><h4>Sencilla Aire</h4><p class="price">RD$ 2,500</p></div>
+                            <input type="number" id="a" class="qty-input" value="0">
                         </div>
                         <div class="room-item">
                             <div class="room-img" style="background-image: url('img/hero2.jpg')"></div>
                             <div class="room-info"><h4>Doble</h4><p class="price">RD$ 3,000</p></div>
-                            <div class="room-qty"><input type="number" id="d" class="qty-input" value="0"></div>
+                            <input type="number" id="d" class="qty-input" value="0">
                         </div>
                         <div class="room-item">
                             <div class="room-img" style="background-image: url('img/hero3.jpg')"></div>
                             <div class="room-info"><h4>Triple</h4><p class="price">RD$ 4,000</p></div>
-                            <div class="room-qty"><input type="number" id="t" class="qty-input" value="0"></div>
+                            <input type="number" id="t" class="qty-input" value="0">
                         </div>
                     </div>
                 </div>
@@ -71,9 +70,19 @@
                 </div>
             </div>
         </main>
+
+        <div id="adminPanel" class="admin-panel hidden">
+            <div class="admin-header">
+                <h3>Gestión de Reservas</h3>
+                <button onclick="toggleAdmin()" class="btn-close">Cerrar</button>
+            </div>
+            <div id="adminList" class="admin-list">
+                </div>
+        </div>
     </div>
 
     <div class="floats">
+        <div class="float-admin" onclick="toggleAdmin()">⚙️</div>
         <a href="https://wa.me/18092823624" class="float-wa">
             <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WA">
         </a>
