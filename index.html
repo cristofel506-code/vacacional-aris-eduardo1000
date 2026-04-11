@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,7 +7,6 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/confirm.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -24,16 +22,16 @@
         </header>
 
         <main class="content-body">
-          <div class="form-section">
-    <label class="label-pro">1. Selecciona tus fechas</label>
-    <div class="input-pro" id="trigger-calendar">
-        <span class="icon">📅</span>
-        <div id="fecha-display" style="font-weight: 700; font-size: 1.1rem; color: #1e293b; padding-left: 5px;">
-            Toca aquí para elegir
-        </div>
-        <input type="hidden" id="fecha">
-    </div>
-</div>
+            <div class="booking-card">
+                <div class="promo-bar">✨ Reserva con el <b>50%</b></div>
+
+                <div class="form-section">
+                    <label class="label-pro">1. Selecciona tus fechas</label>
+                    <div class="input-pro" id="calendar-trigger">
+                        <span class="icon">📅</span>
+                        <input type="text" id="fecha" placeholder="Toca para elegir fechas" readonly inputmode="none">
+                    </div>
+                </div>
 
                 <div class="form-section">
                     <label class="label-pro">2. Habitaciones</label>
@@ -42,47 +40,49 @@
                             <div class="room-img" style="background-image: url('img/hero1.jpg')"></div>
                             <div class="room-info">
                                 <h4>Sencilla (Abanico)</h4>
-                                <p class="price">RD$ 1,500 <span>/ noche</span></p>
+                                <p class="price">RD$ 1,500</p>
                             </div>
-                            <div class="qty-control">
-                                <input type="number" id="s" class="qty-input" value="0" min="0">
-                            </div>
+                            <input type="number" id="s" class="qty-input" value="0" min="0">
                         </div>
                         <div class="room-item">
                             <div class="room-img" style="background-image: url('img/hero12.jpg')"></div>
                             <div class="room-info">
                                 <h4>Sencilla (Aire)</h4>
-                                <p class="price">RD$ 2,500 <span>/ noche</span></p>
+                                <p class="price">RD$ 2,000</p>
                             </div>
-                            <div class="qty-control">
-                                <input type="number" id="a" class="qty-input" value="0" min="0">
-                            </div>
+                            <input type="number" id="a" class="qty-input" value="0" min="0">
                         </div>
                         <div class="room-item">
                             <div class="room-img" style="background-image: url('img/hero2.jpg')"></div>
                             <div class="room-info">
                                 <h4>Doble</h4>
-                                <p class="price">RD$ 3,000 <span>/ noche</span></p>
+                                <p class="price">RD$ 2,500</p>
                             </div>
-                            <div class="qty-control">
-                                <input type="number" id="d" class="qty-input" value="0" min="0">
+                            <input type="number" id="d" class="qty-input" value="0" min="0">
+                        </div>
+                        <div class="room-item">
+                            <div class="room-img" style="background-image: url('img/hero3.jpg')"></div>
+                            <div class="room-info">
+                                <h4>Triple</h4>
+                                <p class="price">RD$ 2,800</p>
                             </div>
+                            <input type="number" id="t" class="qty-input" value="0" min="0">
                         </div>
                     </div>
                 </div>
 
-                <button id="calcularBtn" class="btn-main">CALCULAR TOTAL</button>
+                <button id="calcularBtn" class="btn-main">GENERAR PRESUPUESTO</button>
 
                 <div id="resultado" class="ticket hidden">
                     <div id="resumenContent"></div>
-                    <button id="btnConfirmar" class="btn-confirmar">CONFIRMAR RESERVA</button>
+                    <button id="btnConfirmar" class="btn-confirmar">CONFIRMAR POR WHATSAPP</button>
                 </div>
             </div>
         </main>
 
         <div id="adminPanel" class="admin-panel hidden">
             <div class="admin-header">
-                <h3>Panel de Control</h3>
+                <h3>Gestión de Reservas</h3>
                 <button onclick="toggleAdmin()" class="btn-close">Cerrar</button>
             </div>
             <div id="adminList" class="admin-list"></div>
