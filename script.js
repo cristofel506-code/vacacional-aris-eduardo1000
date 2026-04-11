@@ -15,7 +15,7 @@ const db = getFirestore(app);
 let nochesGlobal = 0;
 let fp;
 
-// INICIALIZAR CALENDARIO
+// INICIALIZAR CALENDARIO (Versión mejorada sin teclado)
 function setupCalendar(blockedDates = []) {
     fp = flatpickr("#fecha", {
         locale: "es",
@@ -23,8 +23,11 @@ function setupCalendar(blockedDates = []) {
         minDate: "today",
         dateFormat: "d/m/Y",
         disable: blockedDates,
-        disableMobile: "true", // Forzar interfaz bonita en móviles
-        onChange: function(selectedDates) {
+        // ESTO EVITA QUE SALGA EL TECLADO
+        clickOpens: true, 
+        allowInput: false,
+        disableMobile: "true", // Esto hace que use el diseño bonito en vez del calendario feo del celular
+        onClose: function(selectedDates) {
             if (selectedDates.length === 2) {
                 const diff = selectedDates[1] - selectedDates[0];
                 nochesGlobal = Math.ceil(diff / (1000 * 60 * 60 * 24));
@@ -32,6 +35,11 @@ function setupCalendar(blockedDates = []) {
         }
     });
 }
+
+// Forzar que al tocar el contenedor también se abra
+document.getElementById('trigger-calendar').onclick = () => {
+    fp.open();
+};
 
 // SINCRONIZACIÓN REAL
 onSnapshot(collection(db, "reservas"), (snapshot) => {
