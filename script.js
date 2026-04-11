@@ -16,25 +16,32 @@ let nochesGlobal = 0;
 let fp;
 
 // INICIALIZAR CALENDARIO (Versión mejorada sin teclado)
-function setupCalendar(blockedDates = []) {
+ function setupCalendar(blockedDates = []) {
     fp = flatpickr("#fecha", {
         locale: "es",
         mode: "range",
         minDate: "today",
         dateFormat: "d/m/Y",
         disable: blockedDates,
-        // ESTO EVITA QUE SALGA EL TECLADO
-        clickOpens: true, 
-        allowInput: false,
-        disableMobile: "true", // Esto hace que use el diseño bonito en vez del calendario feo del celular
-        onClose: function(selectedDates) {
+        disableMobile: true,
+        // Al cerrar el calendario, ponemos la fecha en el DIV
+        onClose: function(selectedDates, dateStr) {
             if (selectedDates.length === 2) {
                 const diff = selectedDates[1] - selectedDates[0];
                 nochesGlobal = Math.ceil(diff / (1000 * 60 * 60 * 24));
+                // Ponemos el texto en el div visual
+                document.getElementById("fecha-display").innerText = dateStr;
+            } else {
+                document.getElementById("fecha-display").innerText = "Selecciona rango completo";
             }
         }
     });
 }
+
+// Abrir el calendario al tocar cualquier parte del recuadro
+document.getElementById('trigger-calendar').onclick = () => {
+    fp.open();
+};
 
 // Forzar que al tocar el contenedor también se abra
 document.getElementById('trigger-calendar').onclick = () => {
