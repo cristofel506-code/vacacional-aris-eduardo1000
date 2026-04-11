@@ -15,129 +15,105 @@ const db = getFirestore(app);
 let nochesGlobal = 0;
 let fp;
 
-// INICIALIZAR CALENDARIO (Versión mejorada sin teclado)
-function setupCalendar(blockedDates = []) {
+function initCalendar(blockedDates = []) {
+    if (fp) fp.destroy();
     fp = flatpickr("#fecha", {
         locale: "es",
         mode: "range",
         minDate: "today",
         dateFormat: "d/m/Y",
         disable: blockedDates,
-        disableMobile: true,
-        // Al cerrar el calendario, ponemos la fecha en el DIV
-        onClose: function(selectedDates, dateStr) {
+        disableMobile: "true",
+        clickOpens: true,
+        allowInput: false,
+        onClose: function(selectedDates) {
             if (selectedDates.length === 2) {
                 const diff = selectedDates[1] - selectedDates[0];
                 nochesGlobal = Math.ceil(diff / (1000 * 60 * 60 * 24));
-                // Ponemos el texto en el div visual
-                document.getElementById("fecha-display").innerText = dateStr;
-            } else {
-                document.getElementById("fecha-display").innerText = "Selecciona rango completo";
             }
         }
     });
 }
 
-// Abrir el calendario al tocar cualquier parte del recuadro
-document.getElementById('trigger-calendar').onclick = () => {
-    fp.open();
-};
+document.getElementById('calendar-trigger').onclick = () => { if(fp) fp.open(); };
 
-// Abrir el calendario al tocar cualquier parte del recuadro
-document.getElementById('trigger-calendar').onclick = () => {
-    fp.open();
-};
-
-// Forzar que al tocar el contenedor también se abra
-document.getElementById('trigger-calendar').onclick = () => {
-    fp.open();
-};
-
-// SINCRONIZACIÓN REAL
 onSnapshot(collection(db, "reservas"), (snapshot) => {
-    const disabled = [];
-    const all = [];
-    snapshot.forEach(doc => {
-        const d = { id: doc.id, ...doc.data() };
-        all.push(d);
-        if (d.estado !== "Pendiente" && d.rango) {
-            disabled.push({ from: d.rango[0], to: d.rango[1] });
+    const disableDates = [];
+    const allReservas = [];
+    snapshot.forEach((doc) => {
+        const data = { id: doc.id, ...doc.data() };
+        allReservas.push(data);
+        if (data.estado !== "Pendiente" && data.rango) {
+            disableDates.push({ from: data.rango[0], to: data.rango[1] });
         }
     });
-    setupCalendar(disabled);
-    renderAdmin(all);
+    initCalendar(disableDates);
+    renderAdmin(allReservas);
 });
 
-// CALCULAR
 document.getElementById("calcularBtn").onclick = () => {
+    const f = document.getElementById("fecha").value;
     const s = parseInt(document.getElementById("s").value) || 0;
     const a = parseInt(document.getElementById("a").value) || 0;
     const d = parseInt(document.getElementById("d").value) || 0;
-    const fechas = document.getElementById("fecha").value;
+    const t = parseInt(document.getElementById("t").value) || 0;
 
-    if (!fechas || nochesGlobal === 0) return alert("Por favor, selecciona las fechas en el calendario.");
-    if (s+a+d === 0) return alert("Elige al menos una habitación.");
+    if (!f || nochesGlobal === 0) return alert("Selecciona tus fechas en el calendario");
+    if (s+a+d+t === 0) return alert("Elige al menos 1 habitación");
 
-    const total = (s*1500 + a*2500 + d*3000) * nochesGlobal;
+    const total = (s*1500 + a*2000 + d*2500 + t*2800) * nochesGlobal;
     const adelanto = total * 0.5;
 
-    const res = document.getElementById("resultado");
-    res.classList.remove("hidden");
+    document.getElementById("resultado").classList.remove("hidden");
     document.getElementById("resumenContent").innerHTML = `
-        <div class="ticket-header">Resumen de Estancia</div>
-        <div class="ticket-price">RD$ ${total.toLocaleString()}</div>
-        <p>${fechas} • <b>${nochesGlobal} Noches</b></p>
-        <div class="pago-destacado">
-            APARTA CON: <b>RD$ ${adelanto.toLocaleString()}</b>
+        <div class="ticket-info">
+            <h2 style="margin:0; font-size:1.8rem;">RD$ ${total.toLocaleString()}</h2>
+            <p style="color:#64748b; margin:5px 0;">${f} (${nochesGlobal} noches)</p>
+            <div class="pago-box">
+                <small>APARTA CON EL 50%:</small>
+                <h3 style="margin:0; color:#16a34a;">RD$ ${adelanto.toLocaleString()}</h3>
+            </div>
         </div>
     `;
 
     document.getElementById("btnConfirmar").onclick = async () => {
         const range = fp.selectedDates.map(d => d.getTime());
         await addDoc(collection(db, "reservas"), {
-            fechas,
+            fechas: f,
             rango: range,
-            total,
+            total: total,
             estado: "Pendiente",
             creado: new Date().getTime()
         });
-        const msg = `Hola Aris! Quiero reservar: %0A📅 Fechas: ${fechas}%0A🌙 Noches: ${nochesGlobal}%0A💰 Total: RD$ ${total.toLocaleString()}`;
+        const msg = `🌴 *RESERVA ARIS*%0A📅 *Fechas:* ${f}%0A🌙 *Noches:* ${nochesGlobal}%0A💰 *Total:* RD$ ${total.toLocaleString()}%0A💳 *Adelanto:* RD$ ${adelanto.toLocaleString()}`;
         window.location.href = `https://wa.me/18092823624?text=${msg}`;
     };
 };
 
-// ADMIN
 window.toggleAdmin = () => {
-    const panel = document.getElementById("adminPanel");
-    if (panel.classList.contains("hidden")) {
-        if (prompt("Clave de acceso:") === "1234") panel.classList.remove("hidden");
-    } else {
-        panel.classList.add("hidden");
-    }
+    const p = document.getElementById("adminPanel");
+    if (p.classList.contains("hidden")) {
+        if (prompt("Clave:") === "1234") p.classList.remove("hidden");
+    } else { p.classList.add("hidden"); }
 };
 
-window.updateStatus = async (id, st) => {
-    await updateDoc(doc(db, "reservas", id), { estado: st });
-};
+window.setStatus = async (id, st) => { await updateDoc(doc(db, "reservas", id), { estado: st }); };
+window.deleteRes = async (id) => { if(confirm("¿Eliminar?")) await deleteDoc(doc(db, "reservas", id)); };
 
-window.deleteRes = async (id) => {
-    if(confirm("¿Eliminar reserva?")) await deleteDoc(doc(db, "reservas", id));
-};
-
-function renderAdmin(list) {
-    const container = document.getElementById("adminList");
-    container.innerHTML = "";
-    list.sort((a,b) => b.creado - a.creado).forEach(r => {
+function renderAdmin(arr) {
+    const list = document.getElementById("adminList");
+    list.innerHTML = "";
+    arr.sort((a,b) => b.creado - a.creado).forEach(res => {
         const div = document.createElement("div");
-        div.className = `admin-card st-${r.estado.toLowerCase()}`;
+        div.className = `admin-card st-${res.estado.toLowerCase()}`;
         div.innerHTML = `
-            <div><b>${r.fechas}</b><br><small>RD$ ${r.total.toLocaleString()} (${r.estado})</small></div>
+            <div><b>${res.fechas}</b><br><small>RD$ ${res.total.toLocaleString()} (${res.estado})</small></div>
             <div class="admin-btns">
-                <button onclick="updateStatus('${r.id}', 'Apartada')">50%</button>
-                <button onclick="updateStatus('${r.id}', 'Pagada')">100%</button>
-                <button onclick="deleteRes('${r.id}')">🗑️</button>
+                <button onclick="setStatus('${res.id}', 'Apartada')">50%</button>
+                <button onclick="setStatus('${res.id}', 'Pagada')">100%</button>
+                <button onclick="deleteRes('${res.id}')">🗑️</button>
             </div>
         `;
-        container.appendChild(div);
+        list.appendChild(div);
     });
 }
